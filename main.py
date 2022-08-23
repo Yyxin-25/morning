@@ -14,7 +14,7 @@ birthday = os.environ['BIRTHDAY']
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
 
-user_id = os.environ["USER_ID"]
+user_id = os.environ["USER_ID"].split("\n")
 template_id = os.environ["TEMPLATE_ID"]
 
 
@@ -49,5 +49,8 @@ client = WeChatClient(app_id, app_secret)
 wm = WeChatMessage(client)
 ci, wea, high_temperature,low_temperature = get_weather()
 data = {"city":{"value":ci, "color":get_random_color()},"weather":{"value":wea, "color":get_random_color()},"high_temperature":{"value":high_temperature, "color":get_random_color()},"low_temperature":{"value":low_temperature, "color":get_random_color()},"love_days":{"value":get_count(), "color":get_random_color()},"birthday_left":{"value":get_birthday(), "color":get_random_color()},"words":{"value":get_words(), "color":get_random_color()}}
-res = wm.send_template(user_id, template_id, data)
-print(res)
+count = 0
+for user_id in user_ids:
+  res = wm.send_template(user_id, template_id, data)
+  count+=1
+print("发送了" + str(count) + "条消息")
